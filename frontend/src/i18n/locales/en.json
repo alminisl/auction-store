@@ -33,7 +33,8 @@
     "deleteConfirm": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
     "editTitle": "Edit Auction",
     "editSubtitle": "Update your auction details",
-    "cannotEdit": "Only draft auctions can be edited"
+    "cannotEdit": "Only draft auctions can be edited",
+    "noActions": "No actions available"
   },
   "auctions": {
     "browseTitle": "Browse Auctions",

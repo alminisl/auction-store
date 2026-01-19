@@ -104,11 +104,6 @@ func (s *AuctionService) Update(ctx context.Context, id, sellerID uuid.UUID, req
 		return nil, domain.ErrForbidden
 	}
 
-	// Can only update draft auctions
-	if auction.Status != domain.AuctionStatusDraft {
-		return nil, domain.ErrAuctionNotDraft
-	}
-
 	if req.CategoryID != nil {
 		auction.CategoryID = req.CategoryID
 	}
@@ -162,11 +157,6 @@ func (s *AuctionService) Delete(ctx context.Context, id, sellerID uuid.UUID) err
 	// Only seller can delete
 	if auction.SellerID != sellerID {
 		return domain.ErrForbidden
-	}
-
-	// Can only delete draft auctions
-	if auction.Status != domain.AuctionStatusDraft {
-		return domain.ErrAuctionNotDraft
 	}
 
 	// Delete images from storage

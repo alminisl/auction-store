@@ -1,6 +1,7 @@
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Clock, Gavel, Pencil, Trash2 } from 'lucide-react';
+import { Clock, Gavel, MoreVertical, Pencil, Trash2 } from 'lucide-react';
 import { useCountdown } from '../../hooks';
 import { formatCurrency } from '../../utils';
 import { cn } from '../../utils/cn';
@@ -17,43 +18,79 @@ interface AuctionCardProps {
 export default function AuctionCard({ auction, className, showActions, onEdit, onDelete }: AuctionCardProps) {
   const { t } = useTranslation();
   const countdown = useCountdown(auction.end_time);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const imageUrl = auction.images?.[0]?.url || '/placeholder-auction.svg';
   const isEndingSoon = countdown.total > 0 && countdown.total < 3600; // Less than 1 hour
   const hasBuyNow = !!auction.buy_now_price && parseFloat(auction.buy_now_price) > 0;
   const isDraft = auction.status === 'draft';
-  const canModify = isDraft && showActions;
+  const canModify = isDraft;
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
 
   return (
     <div className={cn('relative', className)}>
-      {/* Action Buttons */}
-      {canModify && (
-        <div className="absolute top-2 right-2 z-10 flex gap-1">
-          {onEdit && (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onEdit(auction);
-              }}
-              className="p-2 bg-background/90 hover:bg-background rounded-md border border-border shadow-sm transition-colors"
-              title={t('common.edit')}
-            >
-              <Pencil className="h-4 w-4 text-muted-foreground hover:text-primary" />
-            </button>
-          )}
-          {onDelete && (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onDelete(auction);
-              }}
-              className="p-2 bg-background/90 hover:bg-destructive/10 rounded-md border border-border shadow-sm transition-colors"
-              title={t('common.delete')}
-            >
-              <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
-            </button>
+      {/* 3-dot Menu for owner actions */}
+      {showActions && (
+        <div className="absolute top-2 right-2 z-10" ref={menuRef}>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setMenuOpen(!menuOpen);
+            }}
+            className="p-2 bg-background/90 hover:bg-background rounded-md border border-border shadow-sm transition-colors"
+          >
+            <MoreVertical className="h-4 w-4 text-muted-foreground" />
+          </button>
+
+          {/* Dropdown Menu */}
+          {menuOpen && (
+            <div className="absolute right-0 mt-1 w-36 bg-background rounded-md border border-border shadow-lg py-1">
+              {onEdit && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setMenuOpen(false);
+                    onEdit(auction);
+                  }}
+                  className="w-full px-3 py-2 text-left text-sm hover:bg-accent flex items-center gap-2"
+                >
+                  <Pencil className="h-4 w-4" />
+                  {t('common.edit')}
+                </button>
+              )}
+              {onDelete && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setMenuOpen(false);
+                    onDelete(auction);
+                  }}
+                  className="w-full px-3 py-2 text-left text-sm hover:bg-accent flex items-center gap-2 text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  {t('common.delete')}
+                </button>
+              )}
+            </div>
           )}
         </div>
       )}

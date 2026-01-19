@@ -33,7 +33,8 @@
     "deleteConfirm": "Jeste li sigurni da želite obrisati \"{{title}}\"? Ova radnja se ne može poništiti.",
     "editTitle": "Uredi aukciju",
     "editSubtitle": "Ažurirajte detalje aukcije",
-    "cannotEdit": "Samo nacrti aukcija se mogu uređivati"
+    "cannotEdit": "Samo nacrti aukcija se mogu uređivati",
+    "noActions": "Nema dostupnih akcija"
   },
   "auctions": {
     "browseTitle": "Pretraži aukcije",

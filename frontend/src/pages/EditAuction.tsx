@@ -61,8 +61,8 @@ export default function EditAuction() {
     }
   }, [auction]);
 
-  // Check if auction can be edited
-  const canEdit = auction?.status === 'draft';
+  // Owner can always edit their auctions
+  const canEdit = true;
 
   // Determine if selected category is a trading card category
   const selectedCategory = categories.find((cat: Category) => cat.id === categoryId);
@@ -392,20 +392,21 @@ export default function EditAuction() {
               {t('common.cancel')}
             </Button>
             <Button
-              variant="outline"
               onClick={() => handleSubmit(false)}
               disabled={isSubmitting || !title || !startingPrice}
               className="flex-1"
             >
               {isSubmitting ? t('auction.saving') : t('common.save')}
             </Button>
-            <Button
-              onClick={() => handleSubmit(true)}
-              disabled={isSubmitting || !title || !startingPrice}
-              className="flex-1"
-            >
-              {isSubmitting ? t('auction.publishing') : t('auction.publishNow')}
-            </Button>
+            {auction?.status === 'draft' && (
+              <Button
+                onClick={() => handleSubmit(true)}
+                disabled={isSubmitting || !title || !startingPrice}
+                className="flex-1"
+              >
+                {isSubmitting ? t('auction.publishing') : t('auction.publishNow')}
+              </Button>
+            )}
           </div>
         </div>
       </div>

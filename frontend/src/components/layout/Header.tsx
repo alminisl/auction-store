@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Bell, User, Menu, LogOut, Settings, Package, Heart, ShoppingBag } from 'lucide-react';
-import { useState } from 'react';
+import { Search, Bell, User, Menu, LogOut, Settings, Package, Heart, ShoppingBag, MessageSquare } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuthStore } from '../../store';
+import { useAuthStore, useMessageStore } from '../../store';
 import { Button, LanguageSwitcher } from '../common';
 import { cn } from '../../utils';
 
@@ -10,9 +10,20 @@ export default function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuthStore();
+  const { unreadCount, fetchUnreadCount } = useMessageStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Fetch unread message count when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchUnreadCount();
+      // Refresh every 30 seconds
+      const interval = setInterval(fetchUnreadCount, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated, fetchUnreadCount]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,6 +92,18 @@ export default function Header() {
                     className="p-2 text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors"
                   >
                     <Heart className="h-5 w-5" />
+                  </Link>
+
+                  <Link
+                    to="/messages"
+                    className="relative p-2 text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors"
+                  >
+                    <MessageSquare className="h-5 w-5" />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 flex items-center justify-center bg-primary text-primary-foreground text-xs font-medium rounded-full px-1">
+                        {unreadCount > 99 ? '99+' : unreadCount}
+                      </span>
+                    )}
                   </Link>
 
                   <Link
@@ -225,6 +248,18 @@ export default function Header() {
                     className="px-3 py-2 text-sm font-medium text-primary hover:bg-muted rounded-lg transition-colors"
                   >
                     {t('nav.sell')}
+                  </Link>
+                  <Link
+                    to="/messages"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="px-3 py-2 text-sm font-medium text-foreground hover:bg-muted rounded-lg transition-colors flex items-center justify-between"
+                  >
+                    <span>Messages</span>
+                    {unreadCount > 0 && (
+                      <span className="h-5 min-w-5 flex items-center justify-center bg-primary text-primary-foreground text-xs font-medium rounded-full px-1">
+                        {unreadCount > 99 ? '99+' : unreadCount}
+                      </span>
+                    )}
                   </Link>
                   <Link
                     to="/profile"

@@ -16,6 +16,7 @@ import MyAuctions from './pages/MyAuctions';
 import MyPurchases from './pages/MyPurchases';
 import Watchlist from './pages/Watchlist';
 import Categories from './pages/Categories';
+import Messages from './pages/Messages';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -123,6 +124,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <div className="container-custom py-8">Notifications page coming soon</div>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="messages"
+              element={
+                <ProtectedRoute>
+                  <Messages />
                 </ProtectedRoute>
               }
             />

@@ -2,6 +2,7 @@ export * from './user';
 export * from './auction';
 export * from './bid';
 export * from './api';
+export * from './message';
 
 export interface Notification {
   id: string;

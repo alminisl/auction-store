@@ -24,8 +24,20 @@
       "Bash(curl:*)",
       "WebFetch(domain:goldin.co)",
       "WebFetch(domain:www.catawiki.com)",
-      "Bash(powershell -Command:*)",
-      "Bash(go get:*)"
+      "Bash(docker compose:*)",
+      "Bash(go mod download:*)",
+      "Bash(PGPASSWORD=auction123 psql:*)",
+      "Bash(cloudflared:*)",
+      "Bash(grep:*)",
+      "Bash(pm2 restart:*)",
+      "Bash(systemctl status:*)",
+      "Bash(service cloudflared status:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(pkill:*)",
+      "Bash(pkill -f \"cloudflared tunnel --url\")",
+      "Bash(fuser:*)",
+      "Bash(wc:*)"
     ]
   }
 }

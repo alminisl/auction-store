@@ -75,6 +75,8 @@ func handleError(w http.ResponseWriter, err error) {
 		respondError(w, http.StatusBadRequest, "AUCTION_NOT_DRAFT", "Can only modify draft auctions")
 	case errors.Is(err, domain.ErrConcurrentBid):
 		respondError(w, http.StatusConflict, "CONCURRENT_BID", "Another bid was placed, please retry")
+	case errors.Is(err, domain.ErrValidation):
+		respondError(w, http.StatusBadRequest, "VALIDATION_ERROR", "Invalid request data")
 	default:
 		respondError(w, http.StatusInternalServerError, "INTERNAL_ERROR", "An internal error occurred")
 	}

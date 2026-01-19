@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Clock, User, Eye, Gavel, Loader2 } from 'lucide-react';
-import { auctionsApi, bidsApi, usersApi } from '../api';
+import { ArrowLeft, Clock, User, Eye, Gavel, Loader2, MessageSquare } from 'lucide-react';
+import { auctionsApi, bidsApi, usersApi, messagesApi } from '../api';
 import { useCountdown } from '../hooks';
 import { useAuthStore } from '../store';
 import { formatCurrency, formatTimeAgo } from '../utils';
@@ -334,10 +334,23 @@ export default function AuctionDetail() {
 
           {/* Seller and Condition */}
           <div className="space-y-3 mb-6">
-            <div className="flex items-center gap-2">
-              <User className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">{t('auction.seller')}:</span>
-              <span className="text-sm font-medium">@{auction.seller?.username || 'Unknown'}</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <User className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">{t('auction.seller')}:</span>
+                <span className="text-sm font-medium">@{auction.seller?.username || 'Unknown'}</span>
+              </div>
+              {isAuthenticated && !isOwner && auction.seller_id && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate(`/messages?recipient=${auction.seller_id}`)}
+                  className="flex items-center gap-2"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  Message Seller
+                </Button>
+              )}
             </div>
             {auction.condition && (
               <div className="flex items-center gap-2">

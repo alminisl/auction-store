@@ -20,8 +20,8 @@ func main() {
 
 	// Test users to create
 	users := []TestUser{
-		{Email: "test@mail.com", Username: "testuser"},
-		{Email: "buyer@mail.com", Username: "buyer"},
+		{Email: "test@auction.com", Username: "testuser"},
+		{Email: "buyer@auction.com", Username: "buyer"},
 	}
 
 	// Hash the password
@@ -60,7 +60,7 @@ func main() {
 
 	// Verify the password works for first user
 	var storedHash string
-	err = conn.QueryRow(ctx, "SELECT password_hash FROM users WHERE email = $1", "test@mail.com").Scan(&storedHash)
+	err = conn.QueryRow(ctx, "SELECT password_hash FROM users WHERE email = $1", "test@auction.com").Scan(&storedHash)
 	if err != nil {
 		log.Fatal("Error fetching user:", err)
 	}

@@ -112,6 +112,20 @@ type ReportRepository interface {
 	List(ctx context.Context, params *domain.ReportListParams) ([]domain.ReportedListing, int, error)
 }
 
+type MessageRepository interface {
+	GetOrCreateConversation(ctx context.Context, userOne, userTwo uuid.UUID) (*domain.Conversation, error)
+	GetConversationByID(ctx context.Context, id uuid.UUID) (*domain.Conversation, error)
+	GetConversationsForUser(ctx context.Context, userID uuid.UUID) ([]domain.Conversation, error)
+	CreateMessage(ctx context.Context, msg *domain.Message) error
+	GetMessagesByConversation(ctx context.Context, conversationID uuid.UUID, page, limit int) ([]domain.Message, int, error)
+	GetLastMessage(ctx context.Context, conversationID uuid.UUID) (*domain.Message, error)
+	UpdateReadStatus(ctx context.Context, conversationID, userID uuid.UUID) error
+	GetReadStatus(ctx context.Context, conversationID, userID uuid.UUID) (*domain.ConversationReadStatus, error)
+	GetUnreadCountForConversation(ctx context.Context, conversationID, userID uuid.UUID) (int, error)
+	GetTotalUnreadCount(ctx context.Context, userID uuid.UUID) (int, error)
+	IsUserInConversation(ctx context.Context, conversationID, userID uuid.UUID) (bool, error)
+}
+
 // Transaction support
 type TxManager interface {
 	WithTx(ctx context.Context, fn func(ctx context.Context) error) error

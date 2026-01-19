@@ -7,12 +7,17 @@ import (
 )
 
 type Config struct {
-	Server   ServerConfig
-	Database DatabaseConfig
-	Redis    RedisConfig
-	JWT      JWTConfig
-	OAuth    OAuthConfig
-	S3       S3Config
+	Server    ServerConfig
+	Database  DatabaseConfig
+	Redis     RedisConfig
+	JWT       JWTConfig
+	OAuth     OAuthConfig
+	S3        S3Config
+	Messaging MessagingConfig
+}
+
+type MessagingConfig struct {
+	EncryptionKey string
 }
 
 type ServerConfig struct {
@@ -98,6 +103,9 @@ func Load() *Config {
 			BucketName:      getEnv("S3_BUCKET", "auction-images"),
 			UseSSL:          getEnvBool("S3_USE_SSL", false),
 			PublicURL:       getEnv("S3_PUBLIC_URL", ""),
+		},
+		Messaging: MessagingConfig{
+			EncryptionKey: getEnv("MESSAGING_ENCRYPTION_KEY", "a096604c247ad25b619e000b4e3569ad8a669699745f09e470df98e8e98a07b8"),
 		},
 	}
 }

@@ -91,6 +91,7 @@ func main() {
 	watchlistRepo := postgres.NewWatchlistRepository(db)
 	ratingRepo := postgres.NewRatingRepository(db)
 	reportRepo := postgres.NewReportRepository(db)
+	messageRepo := postgres.NewMessageRepository(db)
 
 	// Initialize services
 	frontendURL := cfg.Server.AllowOrigins[0]
@@ -141,9 +142,23 @@ func main() {
 		redisCache,
 	)
 
-	// Initialize WebSocket hub
+	// Initialize WebSocket hubs
 	wsHub := websocket.NewHub(redisCache)
 	go wsHub.Run()
+
+	messageHub := websocket.NewMessageHub(redisCache)
+	go messageHub.Run()
+
+	// Initialize message service
+	messageService, err := service.NewMessageService(
+		messageRepo,
+		userRepo,
+		cfg.Messaging.EncryptionKey,
+		messageHub,
+	)
+	if err != nil {
+		log.Fatalf("Failed to initialize message service: %v", err)
+	}
 
 	// Initialize handlers
 	authHandler := handler.NewAuthHandler(authService, cfg)
@@ -159,6 +174,8 @@ func main() {
 		bidRepo,
 	)
 	wsHandler := handler.NewWebSocketHandler(wsHub)
+	messageHandler := handler.NewMessageHandler(messageService)
+	messageWsHandler := handler.NewMessageWebSocketHandler(messageHub)
 
 	// Initialize middleware
 	authMiddleware := middleware.NewAuthMiddleware(jwtManager)
@@ -282,10 +299,27 @@ func main() {
 			r.Get("/reports", adminHandler.ListReports)
 			r.Put("/reports/{id}", adminHandler.UpdateReport)
 		})
+
+		// Messages (authenticated)
+		r.Route("/messages", func(r chi.Router) {
+			r.Use(authMiddleware.RequireAuth)
+			r.Post("/", messageHandler.SendMessage)
+			r.Get("/unread-count", messageHandler.GetUnreadCount)
+		})
+
+		// Conversations (authenticated)
+		r.Route("/conversations", func(r chi.Router) {
+			r.Use(authMiddleware.RequireAuth)
+			r.Get("/", messageHandler.GetConversations)
+			r.Get("/{id}", messageHandler.GetConversation)
+			r.Get("/{id}/messages", messageHandler.GetMessages)
+			r.Put("/{id}/read", messageHandler.MarkAsRead)
+		})
 	})
 
-	// WebSocket route
+	// WebSocket routes
 	r.With(authMiddleware.OptionalAuth).Get("/ws/auctions/{id}", wsHandler.HandleAuctionWS)
+	r.With(authMiddleware.RequireAuth).Get("/ws/messages", messageWsHandler.HandleMessageWS)
 
 	// Start scheduler
 	schedulerService.Start()
@@ -312,6 +346,7 @@ func main() {
 		defer cancel()
 
 		wsHub.Stop()
+		messageHub.Stop()
 		server.Shutdown(ctx)
 	}()
 

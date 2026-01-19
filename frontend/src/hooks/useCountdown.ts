@@ -38,6 +38,11 @@ export function useCountdown(endTime: string | Date): CountdownResult {
 
   const [countdown, setCountdown] = useState<CountdownResult>(calculateTimeLeft);
 
+  // Immediately recalculate when endTime changes
+  useEffect(() => {
+    setCountdown(calculateTimeLeft());
+  }, [endTime, calculateTimeLeft]);
+
   useEffect(() => {
     const timer = setInterval(() => {
       const newCountdown = calculateTimeLeft();

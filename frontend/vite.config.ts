@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
+    allowedHosts: ['auction.supersecretserver.xyz', 'conjunction-drawn-focal-distributors.trycloudflare.com'],
     proxy: {
       '/api': {
         target: 'http://localhost:8080',

@@ -23,7 +23,9 @@
       "Bash(timeout:*)",
       "Bash(curl:*)",
       "WebFetch(domain:goldin.co)",
-      "WebFetch(domain:www.catawiki.com)"
+      "WebFetch(domain:www.catawiki.com)",
+      "Bash(powershell -Command:*)",
+      "Bash(go get:*)"
     ]
   }
 }

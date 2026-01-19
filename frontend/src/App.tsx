@@ -11,6 +11,7 @@ import Register from './pages/Register';
 import Auctions from './pages/Auctions';
 import AuctionDetail from './pages/AuctionDetail';
 import CreateAuction from './pages/CreateAuction';
+import EditAuction from './pages/EditAuction';
 import MyAuctions from './pages/MyAuctions';
 import MyPurchases from './pages/MyPurchases';
 import Watchlist from './pages/Watchlist';
@@ -66,6 +67,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <CreateAuction />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="auctions/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <EditAuction />
                 </ProtectedRoute>
               }
             />

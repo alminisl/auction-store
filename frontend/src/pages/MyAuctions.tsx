@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Loader2 } from 'lucide-react';
 import { auctionsApi } from '../api';
 import { useAuthStore } from '../store';
 import { AuctionCard } from '../components/auction';
 import { Button } from '../components/common';
-import type { AuctionStatus } from '../types';
+import type { Auction, AuctionStatus } from '../types';
 
 const STATUS_TABS: { value: AuctionStatus | 'all'; labelKey: string }[] = [
   { value: 'all', labelKey: 'myAuctions.all' },
@@ -20,8 +20,11 @@ const STATUS_TABS: { value: AuctionStatus | 'all'; labelKey: string }[] = [
 export default function MyAuctions() {
   const { t } = useTranslation();
   const { user } = useAuthStore();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState<AuctionStatus | 'all'>('all');
   const [page, setPage] = useState(1);
+  const [deleteConfirm, setDeleteConfirm] = useState<Auction | null>(null);
 
   const queryParams = {
     page,
@@ -36,6 +39,14 @@ export default function MyAuctions() {
     enabled: !!user?.id,
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => auctionsApi.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['my-auctions'] });
+      setDeleteConfirm(null);
+    },
+  });
+
   const auctions = auctionsData?.data || [];
   const totalPages = auctionsData?.meta?.total_pages || 1;
 
@@ -46,6 +57,20 @@ export default function MyAuctions() {
 
   const handleLoadMore = () => {
     setPage((prev) => prev + 1);
+  };
+
+  const handleEdit = (auction: Auction) => {
+    navigate(`/auctions/${auction.id}/edit`);
+  };
+
+  const handleDelete = (auction: Auction) => {
+    setDeleteConfirm(auction);
+  };
+
+  const confirmDelete = () => {
+    if (deleteConfirm) {
+      deleteMutation.mutate(deleteConfirm.id);
+    }
   };
 
   return (
@@ -106,7 +131,13 @@ export default function MyAuctions() {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {auctions.map((auction) => (
-              <AuctionCard key={auction.id} auction={auction} />
+              <AuctionCard
+                key={auction.id}
+                auction={auction}
+                showActions
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
             ))}
           </div>
 
@@ -124,6 +155,34 @@ export default function MyAuctions() {
             </div>
           )}
         </>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-background rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+            <h3 className="text-lg font-semibold mb-2">{t('myAuctions.deleteTitle')}</h3>
+            <p className="text-muted-foreground mb-6">
+              {t('myAuctions.deleteConfirm', { title: deleteConfirm.title })}
+            </p>
+            <div className="flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setDeleteConfirm(null)}
+                disabled={deleteMutation.isPending}
+              >
+                {t('common.cancel')}
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={confirmDelete}
+                isLoading={deleteMutation.isPending}
+              >
+                {t('common.delete')}
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

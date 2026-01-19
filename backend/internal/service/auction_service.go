@@ -215,6 +215,23 @@ func (s *AuctionService) List(ctx context.Context, params *domain.AuctionListPar
 		return nil, err
 	}
 
+	// Fetch first image for each auction
+	if len(auctions) > 0 {
+		auctionIDs := make([]uuid.UUID, len(auctions))
+		for i, a := range auctions {
+			auctionIDs[i] = a.ID
+		}
+
+		images, err := s.auctionImageRepo.GetFirstImageByAuctionIDs(ctx, auctionIDs)
+		if err == nil {
+			for i := range auctions {
+				if img, ok := images[auctions[i].ID]; ok {
+					auctions[i].Images = []domain.AuctionImage{img}
+				}
+			}
+		}
+	}
+
 	limit := params.Limit
 	if limit <= 0 {
 		limit = 20

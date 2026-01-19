@@ -28,7 +28,12 @@
     "active": "Active",
     "draft": "Drafts",
     "completed": "Completed",
-    "unsold": "Unsold"
+    "unsold": "Unsold",
+    "deleteTitle": "Delete Auction",
+    "deleteConfirm": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+    "editTitle": "Edit Auction",
+    "editSubtitle": "Update your auction details",
+    "cannotEdit": "Only draft auctions can be edited"
   },
   "auctions": {
     "browseTitle": "Browse Auctions",

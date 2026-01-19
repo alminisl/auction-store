@@ -53,6 +53,7 @@ type AuctionRepository interface {
 type AuctionImageRepository interface {
 	Create(ctx context.Context, image *domain.AuctionImage) error
 	GetByAuctionID(ctx context.Context, auctionID uuid.UUID) ([]domain.AuctionImage, error)
+	GetFirstImageByAuctionIDs(ctx context.Context, auctionIDs []uuid.UUID) (map[uuid.UUID]domain.AuctionImage, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 	DeleteByAuctionID(ctx context.Context, auctionID uuid.UUID) error
 	UpdatePositions(ctx context.Context, auctionID uuid.UUID, positions map[uuid.UUID]int) error

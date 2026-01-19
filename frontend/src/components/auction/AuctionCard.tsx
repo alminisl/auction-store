@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Clock, Gavel } from 'lucide-react';
+import { Clock, Gavel, Pencil, Trash2 } from 'lucide-react';
 import { useCountdown } from '../../hooks';
 import { formatCurrency } from '../../utils';
 import { cn } from '../../utils/cn';
@@ -9,24 +9,59 @@ import type { Auction } from '../../types';
 interface AuctionCardProps {
   auction: Auction;
   className?: string;
+  showActions?: boolean;
+  onEdit?: (auction: Auction) => void;
+  onDelete?: (auction: Auction) => void;
 }
 
-export default function AuctionCard({ auction, className }: AuctionCardProps) {
+export default function AuctionCard({ auction, className, showActions, onEdit, onDelete }: AuctionCardProps) {
   const { t } = useTranslation();
   const countdown = useCountdown(auction.end_time);
 
   const imageUrl = auction.images?.[0]?.url || '/placeholder-auction.svg';
   const isEndingSoon = countdown.total > 0 && countdown.total < 3600; // Less than 1 hour
   const hasBuyNow = !!auction.buy_now_price && parseFloat(auction.buy_now_price) > 0;
+  const isDraft = auction.status === 'draft';
+  const canModify = isDraft && showActions;
 
   return (
-    <Link
-      to={`/auctions/${auction.id}`}
-      className={cn(
-        'group block bg-background rounded-lg border border-border overflow-hidden hover:shadow-lg transition-all duration-200',
-        className
+    <div className={cn('relative', className)}>
+      {/* Action Buttons */}
+      {canModify && (
+        <div className="absolute top-2 right-2 z-10 flex gap-1">
+          {onEdit && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onEdit(auction);
+              }}
+              className="p-2 bg-background/90 hover:bg-background rounded-md border border-border shadow-sm transition-colors"
+              title={t('common.edit')}
+            >
+              <Pencil className="h-4 w-4 text-muted-foreground hover:text-primary" />
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onDelete(auction);
+              }}
+              className="p-2 bg-background/90 hover:bg-destructive/10 rounded-md border border-border shadow-sm transition-colors"
+              title={t('common.delete')}
+            >
+              <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
+            </button>
+          )}
+        </div>
       )}
-    >
+
+      <Link
+        to={`/auctions/${auction.id}`}
+        className="group block bg-background rounded-lg border border-border overflow-hidden hover:shadow-lg transition-all duration-200"
+      >
       {/* Image */}
       <div className="relative aspect-square bg-muted overflow-hidden">
         <img
@@ -39,17 +74,22 @@ export default function AuctionCard({ auction, className }: AuctionCardProps) {
         />
         {/* Status badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-          {isEndingSoon && !countdown.isExpired && (
+          {isDraft && (
+            <span className="bg-amber-500 text-white text-xs font-medium px-2 py-1 rounded-md">
+              {t('myAuctions.draft')}
+            </span>
+          )}
+          {isEndingSoon && !countdown.isExpired && !isDraft && (
             <span className="bg-destructive text-destructive-foreground text-xs font-medium px-2 py-1 rounded-md">
               {t('auction.endingSoon')}
             </span>
           )}
-          {countdown.isExpired && (
+          {countdown.isExpired && !isDraft && (
             <span className="bg-muted-foreground/80 text-white text-xs font-medium px-2 py-1 rounded-md">
               {t('auction.ended')}
             </span>
           )}
-          {hasBuyNow && !countdown.isExpired && (
+          {hasBuyNow && !countdown.isExpired && !isDraft && (
             <span className="bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-md">
               {t('auction.buyNow')}
             </span>
@@ -88,5 +128,6 @@ export default function AuctionCard({ auction, className }: AuctionCardProps) {
         </div>
       </div>
     </Link>
+    </div>
   );
 }

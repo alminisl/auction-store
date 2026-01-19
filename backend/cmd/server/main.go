@@ -20,7 +20,15 @@ import (
 	"github.com/auction-cards/backend/internal/service"
 	"github.com/auction-cards/backend/internal/websocket"
 	"github.com/go-chi/chi/v5"
+	"github.com/joho/godotenv"
 )
+
+func init() {
+	// Load .env file if it exists
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using environment variables")
+	}
+}
 
 func main() {
 	// Load configuration

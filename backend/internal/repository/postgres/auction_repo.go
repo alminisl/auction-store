@@ -505,6 +505,37 @@ func (r *AuctionImageRepository) GetByAuctionID(ctx context.Context, auctionID u
 	return images, nil
 }
 
+func (r *AuctionImageRepository) GetFirstImageByAuctionIDs(ctx context.Context, auctionIDs []uuid.UUID) (map[uuid.UUID]domain.AuctionImage, error) {
+	if len(auctionIDs) == 0 {
+		return make(map[uuid.UUID]domain.AuctionImage), nil
+	}
+
+	// Build query with DISTINCT ON to get first image per auction
+	query := `
+		SELECT DISTINCT ON (auction_id) id, auction_id, url, position, created_at
+		FROM auction_images
+		WHERE auction_id = ANY($1)
+		ORDER BY auction_id, position ASC`
+
+	q := r.db.GetQuerier(ctx)
+	rows, err := q.Query(ctx, query, auctionIDs)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get auction images: %w", err)
+	}
+	defer rows.Close()
+
+	images := make(map[uuid.UUID]domain.AuctionImage)
+	for rows.Next() {
+		var img domain.AuctionImage
+		if err := rows.Scan(&img.ID, &img.AuctionID, &img.URL, &img.Position, &img.CreatedAt); err != nil {
+			return nil, fmt.Errorf("failed to scan image: %w", err)
+		}
+		images[img.AuctionID] = img
+	}
+
+	return images, nil
+}
+
 func (r *AuctionImageRepository) Delete(ctx context.Context, id uuid.UUID) error {
 	query := `DELETE FROM auction_images WHERE id = $1`
 

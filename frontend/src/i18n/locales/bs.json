@@ -28,7 +28,12 @@
     "active": "Aktivne",
     "draft": "Nacrti",
     "completed": "Završene",
-    "unsold": "Neprodane"
+    "unsold": "Neprodane",
+    "deleteTitle": "Obriši aukciju",
+    "deleteConfirm": "Jeste li sigurni da želite obrisati \"{{title}}\"? Ova radnja se ne može poništiti.",
+    "editTitle": "Uredi aukciju",
+    "editSubtitle": "Ažurirajte detalje aukcije",
+    "cannotEdit": "Samo nacrti aukcija se mogu uređivati"
   },
   "auctions": {
     "browseTitle": "Pretraži aukcije",

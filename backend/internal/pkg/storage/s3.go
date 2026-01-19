@@ -68,7 +68,9 @@ func (s *S3Storage) ensureBucket(ctx context.Context) error {
 			return fmt.Errorf("failed to create bucket: %w", err)
 		}
 
-		// Set bucket policy for public read access
+		// Try to set bucket policy for public read access
+		// Note: This may fail on Cloudflare R2 (doesn't support SetBucketPolicy)
+		// For R2, configure public access via Cloudflare dashboard instead
 		policy := fmt.Sprintf(`{
 			"Version": "2012-10-17",
 			"Statement": [
@@ -83,7 +85,9 @@ func (s *S3Storage) ensureBucket(ctx context.Context) error {
 
 		err = s.client.SetBucketPolicy(ctx, s.bucketName, policy)
 		if err != nil {
-			return fmt.Errorf("failed to set bucket policy: %w", err)
+			// Ignore policy error - R2 and some S3-compatible services don't support this
+			// Public access should be configured via their respective dashboards
+			fmt.Printf("Warning: Could not set bucket policy (this is normal for Cloudflare R2): %v\n", err)
 		}
 	}
 

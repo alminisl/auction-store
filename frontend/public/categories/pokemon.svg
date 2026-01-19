@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#FEF3C7"/>
+  <circle cx="200" cy="150" r="80" fill="#FBBF24" stroke="#F59E0B" stroke-width="4"/>
+  <line x1="120" y1="150" x2="280" y2="150" stroke="#1F2937" stroke-width="4"/>
+  <circle cx="200" cy="150" r="20" fill="white" stroke="#1F2937" stroke-width="4"/>
+  <text x="200" y="260" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="#92400E" text-anchor="middle">Pokemon</text>
+</svg>

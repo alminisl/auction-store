@@ -14,6 +14,7 @@ import CreateAuction from './pages/CreateAuction';
 import MyAuctions from './pages/MyAuctions';
 import MyPurchases from './pages/MyPurchases';
 import Watchlist from './pages/Watchlist';
+import Categories from './pages/Categories';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -57,8 +58,7 @@ export default function App() {
             {/* Auction routes */}
             <Route path="auctions" element={<Auctions />} />
             <Route path="auctions/:id" element={<AuctionDetail />} />
-            <Route path="categories" element={<div className="container-custom py-8">Categories page coming soon</div>} />
-            <Route path="categories/:slug" element={<div className="container-custom py-8">Category page coming soon</div>} />
+            <Route path="categories" element={<Categories />} />
 
             {/* Protected routes */}
             <Route

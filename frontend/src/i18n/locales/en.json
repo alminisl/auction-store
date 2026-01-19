@@ -10,6 +10,14 @@
     "noPurchasesDesc": "Items you win or buy will appear here",
     "startShopping": "Start Shopping"
   },
+  "categories": {
+    "title": "Categories",
+    "subtitle": "Browse auctions by category",
+    "viewAll": "View all",
+    "noCategories": "No categories yet",
+    "noCategoriesDesc": "Categories will appear here once they are added.",
+    "auctions": "auctions"
+  },
   "myAuctions": {
     "title": "My Auctions",
     "subtitle": "Manage your auction listings",

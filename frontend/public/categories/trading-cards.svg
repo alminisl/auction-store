@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#3B82F6"/>
+  <!-- Stacked cards -->
+  <rect x="140" y="60" width="100" height="140" rx="8" fill="#E5E7EB" transform="rotate(-10 190 130)"/>
+  <rect x="150" y="60" width="100" height="140" rx="8" fill="#F3F4F6" transform="rotate(5 200 130)"/>
+  <rect x="160" y="60" width="100" height="140" rx="8" fill="white" stroke="#1F2937" stroke-width="2"/>
+  <circle cx="210" cy="110" r="20" fill="#3B82F6"/>
+  <path d="M200 145 L210 135 L220 145 L210 165 Z" fill="#F59E0B"/>
+  <text x="200" y="260" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="white" text-anchor="middle">All Trading Cards</text>
+</svg>

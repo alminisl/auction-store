@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#065F46"/>
+  <ellipse cx="200" cy="130" rx="70" ry="45" fill="#34D399" stroke="#10B981" stroke-width="3"/>
+  <path d="M145 130 Q200 100 255 130" stroke="white" stroke-width="2" fill="none"/>
+  <path d="M145 130 Q200 160 255 130" stroke="white" stroke-width="2" fill="none"/>
+  <line x1="200" y1="85" x2="200" y2="175" stroke="white" stroke-width="2"/>
+  <text x="200" y="260" font-family="system-ui, sans-serif" font-size="24" font-weight="600" fill="#D1FAE5" text-anchor="middle">Sports Cards</text>
+</svg>

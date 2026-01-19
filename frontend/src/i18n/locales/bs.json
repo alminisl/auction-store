@@ -10,6 +10,14 @@
     "noPurchasesDesc": "Artikli koje osvojite ili kupite će se pojaviti ovdje",
     "startShopping": "Počnite kupovati"
   },
+  "categories": {
+    "title": "Kategorije",
+    "subtitle": "Pregledajte aukcije po kategoriji",
+    "viewAll": "Prikaži sve",
+    "noCategories": "Nema kategorija",
+    "noCategoriesDesc": "Kategorije će se pojaviti ovdje kada budu dodane.",
+    "auctions": "aukcija"
+  },
   "myAuctions": {
     "title": "Moje aukcije",
     "subtitle": "Upravljajte svojim aukcijama",

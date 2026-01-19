@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 48" fill="none">
+  <!-- Stacked Cards Icon -->
+  <g transform="translate(0, 4)">
+    <!-- Back card (slightly rotated) -->
+    <rect x="6" y="2" width="26" height="36" rx="3" fill="#E5E7EB" stroke="#D1D5DB" stroke-width="1" transform="rotate(-8 19 20)"/>
+    <!-- Middle card -->
+    <rect x="4" y="2" width="26" height="36" rx="3" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1" transform="rotate(4 17 20)"/>
+    <!-- Front card with design -->
+    <rect x="2" y="2" width="26" height="36" rx="3" fill="white" stroke="#3B82F6" stroke-width="1.5"/>
+    <!-- Card symbol - spade/magic -->
+    <path d="M15 12 L15 8 L13 11 L15 10 L17 11 L15 8 Z" fill="#3B82F6"/>
+    <circle cx="15" cy="18" r="4" fill="#3B82F6"/>
+    <path d="M11 22 Q15 28 19 22" stroke="#3B82F6" stroke-width="1.5" fill="none"/>
+    <!-- Sparkle -->
+    <path d="M24 6 L25 8 L27 7 L25 9 L26 11 L24 9 L22 11 L23 9 L21 7 L23 8 Z" fill="#F59E0B"/>
+  </g>
+
+  <!-- Text: Pirates&Magic -->
+  <text x="42" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700">
+    <tspan fill="#1F2937">Pirates</tspan><tspan fill="#3B82F6">&amp;</tspan><tspan fill="#1F2937">Magic</tspan>
+  </text>
+</svg>

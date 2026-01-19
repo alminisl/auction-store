@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker-compose up:*)",
+      "Bash(go mod init:*)",
+      "Bash(go mod tidy:*)",
+      "Bash(go test:*)",
+      "Bash(npm create:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(node ./node_modules/tailwindcss/lib/cli.js:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)",
+      "Bash(docker info:*)",
+      "Bash(docker-compose ps:*)",
+      "Bash(npm run dev:*)",
+      "Bash(python:*)",
+      "Bash(node:*)",
+      "Bash(npx bcryptjs-cli:*)",
+      "Bash(docker exec:*)",
+      "Bash(go run:*)",
+      "Bash(timeout:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:goldin.co)",
+      "WebFetch(domain:www.catawiki.com)"
+    ]
+  }
+}

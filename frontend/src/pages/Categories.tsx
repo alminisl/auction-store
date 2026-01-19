@@ -42,10 +42,10 @@ function CategoryCard({ category }: CategoryCardProps) {
   return (
     <Link
       to={`/auctions?category_id=${category.id}`}
-      className="group block rounded-xl overflow-hidden bg-background border border-border hover:shadow-lg transition-all duration-200"
+      className="group block rounded-lg overflow-hidden bg-background border border-border hover:shadow-md hover:border-primary/30 transition-all duration-200"
     >
       {/* Image */}
-      <div className="aspect-[4/3] bg-muted overflow-hidden">
+      <div className="aspect-[3/2] bg-muted overflow-hidden">
         <img
           src={imageUrl}
           alt={category.name}
@@ -57,17 +57,12 @@ function CategoryCard({ category }: CategoryCardProps) {
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+      <div className="p-3">
+        <h3 className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">
           {category.name}
         </h3>
-        {category.description && (
-          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-            {category.description}
-          </p>
-        )}
         {category.auction_count !== undefined && (
-          <p className="text-sm text-muted-foreground mt-2">
+          <p className="text-xs text-muted-foreground mt-1">
             {category.auction_count} {t('categories.auctions')}
           </p>
         )}
@@ -132,20 +127,22 @@ export default function Categories() {
 
                   {/* Subcategories Grid */}
                   {subcategories.length > 0 ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                       {subcategories.map(category => (
                         <CategoryCard key={category.id} category={category} />
                       ))}
                     </div>
                   ) : (
-                    <CategoryCard category={parent} />
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                      <CategoryCard category={parent} />
+                    </div>
                   )}
                 </div>
               );
             })
           ) : (
             /* If no parent/child structure, just show all categories */
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {categories.map(category => (
                 <CategoryCard key={category.id} category={category} />
               ))}

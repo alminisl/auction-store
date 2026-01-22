@@ -55,6 +55,7 @@ export default function AuctionDetail() {
       setError('');
       queryClient.invalidateQueries({ queryKey: ['auction', id] });
       queryClient.invalidateQueries({ queryKey: ['auction-bids', id] });
+      queryClient.invalidateQueries({ queryKey: ['auctions'] });
 
       // Auto-add to watchlist when placing a bid
       try {
@@ -79,6 +80,7 @@ export default function AuctionDetail() {
       setSuccess(t('auction.purchased'));
       setError('');
       queryClient.invalidateQueries({ queryKey: ['auction', id] });
+      queryClient.invalidateQueries({ queryKey: ['auctions'] });
       setTimeout(() => setSuccess(''), 3000);
     },
     onError: (err: any) => {
